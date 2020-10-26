@@ -22,6 +22,10 @@
 #include <sys/sysinfo.h>
 #include <unistd.h>
 
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;//it is useless now until we decide what is out critical section
+
+
+
 void *mythread (void *arg){
     
 
@@ -31,20 +35,19 @@ void *mythread (void *arg){
 
 int main(int argc, char** argv)
 {   
-    pthread_mutex_t lock; //it is useless now until we decide what is out critical section
     if(argv<=1){
         char buffer[] = "pzip: file1 [file2 ...]";
         fwrite(buffer, 24 , 1,stdout); 
         return 1;
     }
     
-    pthread_t p1 ;
+    //pthread_t p1 ;
     //Not decide the number of thread
 
-    Pthread_create(&p1, NULL, mythread, "A");
+    //Pthread_create(&p1, NULL, mythread, "A");
     //Create thread
 
-    Pthread_join(p1 , null);
+    //Pthread_join(p1 , null);
     //Join to wait for the threads to finish
 
     return 0;
