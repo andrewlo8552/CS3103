@@ -11,6 +11,14 @@
  * Third member's email address: (leave blank if none)
  */
 
+/*
+//Lam Ting 10/26 mmap worked
+
+
+
+
+
+*/
 // add/remove header files as you need
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,35 +29,43 @@
 #include <sys/stat.h>
 #include <sys/sysinfo.h>
 #include <unistd.h>
-
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;//it is useless now until we decide what is out critical section
-
-
-
-void *mythread (void *arg){
-    
-
-
-}
-
-
 int main(int argc, char** argv)
 {   
-    if(argv<=1){
-        char buffer[] = "pzip: file1 [file2 ...]";
+    //pthread_mutex_t lock; it is useless now until we decide what is out critical section
+    if(argc<=1){
+        char buffer[] = "pzip: file1 [file2 ...]\n";
         fwrite(buffer, 24 , 1,stdout); 
         return 1;
     }
-    
-    //pthread_t p1 ;
+    printf("Ver.12d3233\n");//version check
+    //Test opening of file printf("%d", file_open);
+    int file_open = open(argv[1] , O_RDONLY);
+    //file struct
+    struct stat statbuf;
+    //get the detail of file here : num of text || Testprintf("%ld", statbuf.st_size);
+    fstat (file_open,&statbuf);
+    //mmap pointer
+    char *src;
+    //check mmap successful
+    if ((src = mmap (NULL, statbuf.st_size, PROT_READ, MAP_SHARED, file_open, 0)) == (caddr_t) -1)
+    {
+        printf ("mmap error for input");
+        return 0;
+    }
+    //print mmap value
+    for(int i=0;i<statbuf.st_size;i++){
+        printf ("%c",src[i]); 
+    }
+    /*
+    pthread_t p1 ;
     //Not decide the number of thread
 
-    //Pthread_create(&p1, NULL, mythread, "A");
+    Pthread_create(&p1, NULL, mythread, "A");
     //Create thread
 
-    //Pthread_join(p1 , null);
+    Pthread_join(p1 , null);
     //Join to wait for the threads to finish
-
+    */
     return 0;
 }
 
