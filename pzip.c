@@ -13,11 +13,17 @@
 
 /*
 //Lam Ting 10/26 mmap worked
+//One Producer produce the String from inputfile to give multiple Consumer
+//if Producer get n+1 char is different with n 
+//it will start give the char to another Consumer(2)
+//Consumer (1) start count the result output to the stdout
+//Consumer (1) will wait until next round.
 
-
-
-
-
+// it will have multiple lock 
+//One Lock will lock the given char to Consumer
+//One Lock will lock the writing to stdout
+//Only One Consumer take the char from Producer
+//Only One Consumer output the result to stdout
 */
 // add/remove header files as you need
 #include <stdio.h>
@@ -67,5 +73,9 @@ int main(int argc, char** argv)
     //Join to wait for the threads to finish
     */
     return 0;
+}
+
+void *consumer(void *arg){
+    int
 }
 
