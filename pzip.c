@@ -13,6 +13,15 @@
 
 /*
 //Lam Ting 10/26 mmap worked
+//
+//
+//
+//
+//
+//
+//
+//
+//Design
 //One Producer produce the String from inputfile to give multiple Consumer
 //if Producer get n+1 char is different with n 
 //it will start give the char to another Consumer(2)
