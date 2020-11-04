@@ -85,6 +85,12 @@ int main(int argc, char** argv)
 }
 
 void *consumer(void *arg){
-    int
+     
 }
+
+void *producer(){
+
+}
+    
+    
 
