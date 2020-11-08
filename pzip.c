@@ -2,11 +2,11 @@
  * NOTE TO STUDENTS: Before you do anything else, please
  * provide your group information here.
  *
- * Group No.: 10 (Join a project group in Canvas)
- * First member's full name: Tom Chan
- * First member's email address: cctom2-c@my.cityu.edu.hk
- * Second member's full name: (leave blank if none)
- * Second member's email address: (leave blank if none)
+ * Group No.:  (Join a project group in Canvas)
+ * First member's full name: Ryan Chan
+ * First member's email address: 
+ * Second member's full name: Andrew Low
+ * Second member's email address: 
  * Third member's full name: Lam Chi Ting
  * Third member's email address: chitlam7-c@my.cityu.edu.hk
  */
