@@ -7,21 +7,39 @@
  * First member's email address: cctom2-c@my.cityu.edu.hk
  * Second member's full name: (leave blank if none)
  * Second member's email address: (leave blank if none)
- * Third member's full name: (leave blank if none)
- * Third member's email address: (leave blank if none)
+ * Third member's full name: Lam Chi Ting
+ * Third member's email address: chitlam7-c@my.cityu.edu.hk
  */
-
-/*
+/*  Work Progress
 //Lam Ting 10/26 mmap worked
-//
-//
-//
-//
-//
-//
-//
-//
-//Design
+//Lam Ting 11/08 Producer get the mmap text and able to print it
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
 //One Producer produce the String from inputfile to give multiple Consumer
 //if Producer get n+1 char is different with n 
 //it will start give the char to another Consumer(2)
@@ -33,8 +51,10 @@
 //One Lock will lock the writing to stdout
 //Only One Consumer take the char from Producer
 //Only One Consumer output the result to stdout
-*/
-// add/remove header files as you need
+
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -44,6 +64,13 @@
 #include <sys/stat.h>
 #include <sys/sysinfo.h>
 #include <unistd.h>
+
+void* Producer(void *arg){//Worked get the text 11/08
+    char *str = (char*) arg;//get the data 
+    fprintf( stdout, "%s\n", str);//print the data from main 
+    pthread_exit(NULL);//leave thread
+}
+
 int main(int argc, char** argv)
 {   
     //pthread_mutex_t lock; it is useless now until we decide what is out critical section
@@ -52,45 +79,28 @@ int main(int argc, char** argv)
         fwrite(buffer, 24 , 1,stdout); 
         return 1;
     }
-    printf("Ver.12d3233\n");//version check
-    //Test opening of file printf("%d", file_open);
+    //printf("Ver.12d3233\n");//version check//Test opening of file printf("%d", file_open);
     int file_open = open(argv[1] , O_RDONLY);
-    //file struct
-    struct stat statbuf;
-    //get the detail of file here : num of text || Testprintf("%ld", statbuf.st_size);
-    fstat (file_open,&statbuf);
-    //mmap pointer
-    char *src;
-    //check mmap successful
-    if ((src = mmap (NULL, statbuf.st_size, PROT_READ, MAP_SHARED, file_open, 0)) == (caddr_t) -1)
+    struct stat statbuf;//file struct
+    fstat (file_open,&statbuf);//get the detail of file here : num of text || Testprintf("%ld", statbuf.st_size);
+    char *src; //mmap pointer
+    if ((src = mmap (NULL, statbuf.st_size, PROT_READ, MAP_SHARED, file_open, 0)) == (caddr_t) -1)//check mmap successful
     {
         printf ("mmap error for input");
         return 0;
     }
     //print mmap value
+    /*
     for(int i=0;i<statbuf.st_size;i++){
         printf ("%c",src[i]); 
     }
-    /*
-    pthread_t p1 ;
-    //Not decide the number of thread
-
-    Pthread_create(&p1, NULL, mythread, "A");
-    //Create thread
-
-    Pthread_join(p1 , null);
-    //Join to wait for the threads to finish
     */
+    //not work
+    pthread_t producer;//declear Producer
+    pthread_create(&producer, NULL, Producer, src);//Create thread Worked 11/08
+
+    pthread_join(producer,NULL);//wait thread end
+
     return 0;
 }
-
-void *consumer(void *arg){
-     
-}
-
-void *producer(){
-
-}
-    
-    
 
