@@ -3,8 +3,8 @@
  * provide your group information here.
  *
  * Group No.:  (Join a project group in Canvas)
- * First member's full name: Ryan Chan
- * First member's email address: 
+ * First member's full name: Chan Pun Hei
+ * First member's email address: punhchan2-c@my.cityu.edu.hk
  * Second member's full name: Andrew Low
  * Second member's email address: 
  * Third member's full name: Lam Chi Ting
