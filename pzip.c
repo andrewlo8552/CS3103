@@ -11,10 +11,6 @@
  * Third member's email address: chitlam7-c@my.cityu.edu.hk
 */
 
-//Work Progress
-//Lam Ting 10/26 mmap worked
-//Lam Ting 11/08 Producer get the mmap text and able to print it
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +28,7 @@ clock_t start;
 
 int numOfInputs;
 int numOfFiles = 0;
-int pageCapa = 25*1024*1024; //Capacity of each page: 25MB
+int pageCapa = 20*1024*1024; //Capacity of each page: 20MB
 int totalPages = 0;
 int* numOfPagesPerFile; //Each file have how many pages
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER, compressLock = PTHREAD_MUTEX_INITIALIZER; //To prevent deadlock
@@ -78,17 +74,21 @@ struct buffer get(){
 void* producer(void *arg){
 	char** filenames = (char**)arg;
   int file;
+  int numOfPages = 0, pageSize = 0;
   struct stat fileInfo;
   char* mapAddress;
+  
 	
 	//Split files to pages
   for(int i=0;i<numOfFiles;i++){
-		file = open(filenames[i], O_RDONLY);
+		
+    file = open(filenames[i], O_RDONLY);
     //numOfPages: number of pages in file
     //pageSize: size of page
-    int numOfPages = 0, pageSize = 0;
+    numOfPages = 0;
+    pageSize = 0;
 		
-		//Stop if file not found
+    //Stop if file not found
     if(file == -1){
       printf("Error: File didn't open\n");
       exit(1);
@@ -139,6 +139,7 @@ void* producer(void *arg){
             page.pageNum = x;
             page.fileNum = i;
             mapAddress += pageCapa;
+            //printf("page.mapAddress: %s\n",page.address);
             //printf("Ready to put\n");
             //Put temp to queue
             pthread_mutex_lock(&lock);
@@ -159,18 +160,18 @@ void* producer(void *arg){
 //Do compression
 void compress(struct buffer page){
 	
+    int position = 0, count=0;
+    struct output compressed;
+    char* tempString=malloc(page.pageSize);
+    
     //Calculate position of page
-    int position = 0;
     for(int i=0;i<page.fileNum;i++){
             position += numOfPagesPerFile[i];
         }
     position += page.pageNum;
 
     //Do compression
-    struct output compressed;
     compressed.count=malloc(page.pageSize*sizeof(int));
-    char* tempString=malloc(page.pageSize);
-    int count=0; 
     //printf("pageSize: %d\n",page.pageSize);
     for(int i=0;i<page.pageSize;i++){
         //Start new character and count
@@ -188,14 +189,8 @@ void compress(struct buffer page){
     compressed.data=realloc(tempString,count);
     out[position] = compressed;
     //printf("compress end time: %f\n",((double)(clock()-start))/CLOCKS_PER_SEC);
-    //return compressed;
     //printf("compressed.count,data: %ls%s\n",compressed.count,compressed.data);
-    //Put into output
-    //printf("Before put\n");
     
-    //printf("out[position].count,data: %d%s\n",out[position].size,out[position].data);
-    //printf("out[position].size: %d\n", out[position].size);
-    //printf("Put into output\n");
 }
 
 //To get the pages from queue and compress
@@ -261,7 +256,7 @@ void printOutput(){
 
 char** checkDir(char** inputs){
     DIR * dir;
-    //Dynamic array
+    //Dynamic array, this program can read 100 files at most
     char** filenames = calloc(100,sizeof(char*));
     char* fn,fdir[70];
     struct dirent * ptr;
@@ -311,10 +306,11 @@ int main(int argc, char* argv[]){
     }
 
 	  //Create threads, create consumer by the number of processors
-    numOfInputs = argc - 1;
     int numOfThreads = get_nprocs();
+    char** filenames;
+    numOfInputs = argc - 1;
     //Check does input contain directory
-    char** filenames = checkDir(argv+1);
+    filenames = checkDir(argv+1);
 	  //Give location for numOfPagesPerFile and output
     numOfPagesPerFile = malloc(sizeof(int)*numOfFiles);
     out = malloc(sizeof(struct output)*512000*2); 
