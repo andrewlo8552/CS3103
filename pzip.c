@@ -5,8 +5,8 @@
  * Group No.:  (Join a project group in Canvas)
  * First member's full name: Chan Pun Hei
  * First member's email address: punhchan2-c@my.cityu.edu.hk
- * Second member's full name: Andrew Low
- * Second member's email address: 
+ * Second member's full name: Lo Tak Yu
+ * Second member's email address: takyulo2-c@my.cityu.edu.hk
  * Third member's full name: Lam Chi Ting
  * Third member's email address: chitlam7-c@my.cityu.edu.hk
 */
